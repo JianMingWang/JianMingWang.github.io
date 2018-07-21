@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="规划领域-通过搜索进行问题求解 人工智能-一种现代的方法（第三版）- 第 3 章学习整理  通过搜索求解 在规划领域中，可将现实世界看做是一个状态空间，将其中的变化看作是集合中状态到状态之间的转化（即指动作）。在解决规划问题时，也可采用同样的思路。将问题变为一个树形结构或图形结构，节点对应状态、结点之间的连线对应行动，规划问题即转化为从一个树形结构或图结构根节点到目标节点的寻路问题，所以了解搜索算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无信息搜索算法整理">
+<meta property="og:url" content="http://yoursite.com/2018/07/21/无信息搜索算法整理/index.html">
+<meta property="og:site_name" content="健铭">
+<meta property="og:description" content="规划领域-通过搜索进行问题求解 人工智能-一种现代的方法（第三版）- 第 3 章学习整理  通过搜索求解 在规划领域中，可将现实世界看做是一个状态空间，将其中的变化看作是集合中状态到状态之间的转化（即指动作）。在解决规划问题时，也可采用同样的思路。将问题变为一个树形结构或图形结构，节点对应状态、结点之间的连线对应行动，规划问题即转化为从一个树形结构或图结构根节点到目标节点的寻路问题，所以了解搜索算">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oz02m20ga.bkt.clouddn.com/0721%E5%85%AD%E4%B8%AD%E6%90%9C%E7%B4%A2%E7%AD%96%E7%95%A5%E5%AF%B9%E6%AF%94.png">
+<meta property="og:updated_time" content="2018-07-21T02:03:23.563Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="无信息搜索算法整理">
+<meta name="twitter:description" content="规划领域-通过搜索进行问题求解 人工智能-一种现代的方法（第三版）- 第 3 章学习整理  通过搜索求解 在规划领域中，可将现实世界看做是一个状态空间，将其中的变化看作是集合中状态到状态之间的转化（即指动作）。在解决规划问题时，也可采用同样的思路。将问题变为一个树形结构或图形结构，节点对应状态、结点之间的连线对应行动，规划问题即转化为从一个树形结构或图结构根节点到目标节点的寻路问题，所以了解搜索算">
+<meta name="twitter:image" content="http://oz02m20ga.bkt.clouddn.com/0721%E5%85%AD%E4%B8%AD%E6%90%9C%E7%B4%A2%E7%AD%96%E7%95%A5%E5%AF%B9%E6%AF%94.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/21/无信息搜索算法整理/"/>
+
+
+
+
+
+  <title>无信息搜索算法整理 | 健铭</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">健铭</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">爱你所爱，行你所行，听从你心，无问西东。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/21/无信息搜索算法整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="健铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oz02m20ga.bkt.clouddn.com/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="健铭">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">无信息搜索算法整理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-21T10:03:23+08:00">
+                2018-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="规划领域-通过搜索进行问题求解"><a href="#规划领域-通过搜索进行问题求解" class="headerlink" title="规划领域-通过搜索进行问题求解"></a>规划领域-通过搜索进行问题求解</h2><blockquote>
+<p>人工智能-一种现代的方法（第三版）- 第 3 章学习整理</p>
+</blockquote>
+<h3 id="通过搜索求解"><a href="#通过搜索求解" class="headerlink" title="通过搜索求解"></a>通过搜索求解</h3><blockquote>
+<p>在规划领域中，可将现实世界看做是一个<strong>状态空间</strong>，将其中的变化看作是集合中状态到状态之间的转化（即指动作）。在解决规划问题时，也可采用同样的思路。将问题变为一个树形结构或图形结构，节点对应状态、结点之间的连线对应行动，规划问题即转化为从一个树形结构或图结构根节点到目标节点的寻路问题，所以了解搜索算法对于解决规划领域问题是不可缺少的。</p>
+</blockquote>
+<p>在对问题进行形式化之后，我们需要对问题求解，一个解是一个行动序列，所以搜索算法的工作就是考虑各种可能的行动序列。<strong>可能的行动序列从搜索树中根节点的初始状态出发；连线表示行动，结点对应问题在状态空间的状态。</strong></p>
+<h3 id="搜索算法基础"><a href="#搜索算法基础" class="headerlink" title="搜索算法基础"></a>搜索算法基础</h3><p>搜索算法需要一个数据结构来记录搜索树的构造过程。对树中的每个节点，我们定义的数据结构包含四个元素：</p>
+<ul>
+<li><strong><em>n.STATE:</em></strong> 对应状态空间的状态；</li>
+<li><strong><em>n.PARENT:</em></strong> 搜索树中产生该结点的结点</li>
+<li><strong><em>n.ACTION:</em></strong> 父结点生成该结点时所采取的行动；</li>
+<li><strong><em>n.PATH_COST:</em></strong> 代价，一般用 <strong><em>g(n)</em></strong> 表示，指从初始状态到达该结点的路径消耗；</li>
+</ul>
+<p>算法中包含三类队列：</p>
+<ul>
+<li><strong>FIFO</strong> 队列，先进先出队列</li>
+<li><strong>LIFO</strong> 队列（即栈）,总是最新鲜的元素出队列</li>
+<li><strong>优先级队列</strong> 队列中的元素具有根据函数计算出的优先级，总是具有最高优先级的队列出队</li>
+</ul>
+<h3 id="搜索算法四个性能指标"><a href="#搜索算法四个性能指标" class="headerlink" title="搜索算法四个性能指标"></a>搜索算法四个性能指标</h3><p>在设计搜索算法之前，需要设定一些标准。评价一个搜索算法的性能要考虑四个方面：</p>
+<ul>
+<li><strong>完备性：</strong> 当问题有解时，这个算法是否能保证找到解？</li>
+<li><strong>最优性：</strong> 搜索策略是否能找到问题的最优解？</li>
+<li><strong>时间复杂度：</strong> 找到解需要花费多长时间？</li>
+<li><strong>空间复杂度：</strong> 在执行搜索过程中需要多少内存？</li>
+</ul>
+<blockquote>
+<p>此处补充一下最优解的定义：问题的解就是从初始状态到目标状态的一组行动序列。解的质量由路径耗散函数度量，所有解里路径耗散函数最小的解即为最优解</p>
+</blockquote>
+<h2 id="无信息搜索策略（盲目搜索）"><a href="#无信息搜索策略（盲目搜索）" class="headerlink" title="无信息搜索策略（盲目搜索）"></a>无信息搜索策略（盲目搜索）</h2><blockquote>
+<p>无信息搜索（盲目搜索）：指的是除了问题定义中提供的状态信息没有任何附加信息</p>
+</blockquote>
+<p>无信息搜索策略包含以下六种：</p>
+<ul>
+<li>宽度优先搜索（广度优先搜索）</li>
+<li>深度优先搜索</li>
+<li>一致代价搜索（等代价搜索）</li>
+<li>深度受限收缩</li>
+<li>迭代加深的深度优先搜索</li>
+<li>双向搜索</li>
+</ul>
+<h3 id="深度受限搜索"><a href="#深度受限搜索" class="headerlink" title="深度受限搜索"></a>深度受限搜索</h3><p><strong>深度受限搜索</strong>，为了避免深度优先搜索在无限状态空间条件下的尴尬，设置一个搜索深度限制L，当搜索深度限制小于最浅目标节点深度 d 时，算法是不完备的（即不能求得问题的解），若l &gt; d 时，深度首先搜索同样不是最优的，深度优先搜索可看做是特殊的深度受限搜索，其搜索深度限制为正无穷。</p>
+<h3 id="迭代加深的深度优先搜索"><a href="#迭代加深的深度优先搜索" class="headerlink" title="迭代加深的深度优先搜索"></a>迭代加深的深度优先搜索</h3><p><strong>迭代加深的深度优先搜索</strong>，是一种常用策略，他经常和深度优先搜索结合使用来确定最好的深度接线。做法是不断地增大深度限制，首先为0，接着为1，不断增加，直到找到目标。迭代加深的深度优先搜索是完备的，当路径代价是节点深度的非递减函数是该算法是最优的。当搜索空间较大并且不知道解所在的深度是，迭代加深的深度优先搜索是首选的无信息搜索方法。</p>
+<h3 id="双向搜索"><a href="#双向搜索" class="headerlink" title="双向搜索"></a>双向搜索</h3><p><strong>双向搜索</strong>：同时运行两个搜索，一个从初始状态向前搜索同时另一个从目标状态向后搜索，希望它们在中间某点相遇，此时搜索终止。需要注意的是即使双向搜索两个方向采用的都是宽度优先搜索，找到的解可能是不是最优解，部分问题很难采用双向搜索算法，例如八皇后问题。</p>
+<h3 id="六种无信息搜索策略对比"><a href="#六种无信息搜索策略对比" class="headerlink" title="六种无信息搜索策略对比"></a>六种无信息搜索策略对比</h3><p><img src="http://oz02m20ga.bkt.clouddn.com/0721%E5%85%AD%E4%B8%AD%E6%90%9C%E7%B4%A2%E7%AD%96%E7%95%A5%E5%AF%B9%E6%AF%94.png" alt="六种无信息搜索策略对比"></p>
+<blockquote>
+<p>宽度优先搜索、深度优先搜索、一致代价搜索较为简单，此处略去介绍，以后再做补充</p>
+</blockquote>
+<h2 id="有信息的搜索策略（启发式搜索）"><a href="#有信息的搜索策略（启发式搜索）" class="headerlink" title="有信息的搜索策略（启发式搜索）"></a>有信息的搜索策略（启发式搜索）</h2><blockquote>
+<p>下期再做介绍（主要是我还没有看完- -、）– 2018. 07. 21<br>近期很喜欢的一个<a href="http://music.163.com/m/mv?id=5855012&amp;userid=67464910" title="真实、好听" target="_blank" rel="noopener">视频</a>，真实、好听！</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/16/0716-近期学习内容梳理/" rel="next" title="0716-近期学习内容梳理">
+                <i class="fa fa-chevron-left"></i> 0716-近期学习内容梳理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://oz02m20ga.bkt.clouddn.com/avatar.JPG"
+                alt="健铭" />
+            
+              <p class="site-author-name" itemprop="name">健铭</p>
+              <p class="site-description motion-element" itemprop="description">记录生活、感悟、学习笔记、碎碎念等</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#规划领域-通过搜索进行问题求解"><span class="nav-number">1.</span> <span class="nav-text">规划领域-通过搜索进行问题求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过搜索求解"><span class="nav-number">1.1.</span> <span class="nav-text">通过搜索求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索算法基础"><span class="nav-number">1.2.</span> <span class="nav-text">搜索算法基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索算法四个性能指标"><span class="nav-number">1.3.</span> <span class="nav-text">搜索算法四个性能指标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无信息搜索策略（盲目搜索）"><span class="nav-number">2.</span> <span class="nav-text">无信息搜索策略（盲目搜索）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#深度受限搜索"><span class="nav-number">2.1.</span> <span class="nav-text">深度受限搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代加深的深度优先搜索"><span class="nav-number">2.2.</span> <span class="nav-text">迭代加深的深度优先搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双向搜索"><span class="nav-number">2.3.</span> <span class="nav-text">双向搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六种无信息搜索策略对比"><span class="nav-number">2.4.</span> <span class="nav-text">六种无信息搜索策略对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有信息的搜索策略（启发式搜索）"><span class="nav-number">3.</span> <span class="nav-text">有信息的搜索策略（启发式搜索）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">健铭</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

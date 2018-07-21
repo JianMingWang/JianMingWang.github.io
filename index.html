@@ -252,6 +252,177 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/21/无信息搜索算法整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="健铭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oz02m20ga.bkt.clouddn.com/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="健铭">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/21/无信息搜索算法整理/" itemprop="url">无信息搜索算法整理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-21T10:03:23+08:00">
+                2018-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="规划领域-通过搜索进行问题求解"><a href="#规划领域-通过搜索进行问题求解" class="headerlink" title="规划领域-通过搜索进行问题求解"></a>规划领域-通过搜索进行问题求解</h2><blockquote>
+<p>人工智能-一种现代的方法（第三版）- 第 3 章学习整理</p>
+</blockquote>
+<h3 id="通过搜索求解"><a href="#通过搜索求解" class="headerlink" title="通过搜索求解"></a>通过搜索求解</h3><blockquote>
+<p>在规划领域中，可将现实世界看做是一个<strong>状态空间</strong>，将其中的变化看作是集合中状态到状态之间的转化（即指动作）。在解决规划问题时，也可采用同样的思路。将问题变为一个树形结构或图形结构，节点对应状态、结点之间的连线对应行动，规划问题即转化为从一个树形结构或图结构根节点到目标节点的寻路问题，所以了解搜索算法对于解决规划领域问题是不可缺少的。</p>
+</blockquote>
+<p>在对问题进行形式化之后，我们需要对问题求解，一个解是一个行动序列，所以搜索算法的工作就是考虑各种可能的行动序列。<strong>可能的行动序列从搜索树中根节点的初始状态出发；连线表示行动，结点对应问题在状态空间的状态。</strong></p>
+<h3 id="搜索算法基础"><a href="#搜索算法基础" class="headerlink" title="搜索算法基础"></a>搜索算法基础</h3><p>搜索算法需要一个数据结构来记录搜索树的构造过程。对树中的每个节点，我们定义的数据结构包含四个元素：</p>
+<ul>
+<li><strong><em>n.STATE:</em></strong> 对应状态空间的状态；</li>
+<li><strong><em>n.PARENT:</em></strong> 搜索树中产生该结点的结点</li>
+<li><strong><em>n.ACTION:</em></strong> 父结点生成该结点时所采取的行动；</li>
+<li><strong><em>n.PATH_COST:</em></strong> 代价，一般用 <strong><em>g(n)</em></strong> 表示，指从初始状态到达该结点的路径消耗；</li>
+</ul>
+<p>算法中包含三类队列：</p>
+<ul>
+<li><strong>FIFO</strong> 队列，先进先出队列</li>
+<li><strong>LIFO</strong> 队列（即栈）,总是最新鲜的元素出队列</li>
+<li><strong>优先级队列</strong> 队列中的元素具有根据函数计算出的优先级，总是具有最高优先级的队列出队</li>
+</ul>
+<h3 id="搜索算法四个性能指标"><a href="#搜索算法四个性能指标" class="headerlink" title="搜索算法四个性能指标"></a>搜索算法四个性能指标</h3><p>在设计搜索算法之前，需要设定一些标准。评价一个搜索算法的性能要考虑四个方面：</p>
+<ul>
+<li><strong>完备性：</strong> 当问题有解时，这个算法是否能保证找到解？</li>
+<li><strong>最优性：</strong> 搜索策略是否能找到问题的最优解？</li>
+<li><strong>时间复杂度：</strong> 找到解需要花费多长时间？</li>
+<li><strong>空间复杂度：</strong> 在执行搜索过程中需要多少内存？</li>
+</ul>
+<blockquote>
+<p>此处补充一下最优解的定义：问题的解就是从初始状态到目标状态的一组行动序列。解的质量由路径耗散函数度量，所有解里路径耗散函数最小的解即为最优解</p>
+</blockquote>
+<h2 id="无信息搜索策略（盲目搜索）"><a href="#无信息搜索策略（盲目搜索）" class="headerlink" title="无信息搜索策略（盲目搜索）"></a>无信息搜索策略（盲目搜索）</h2><blockquote>
+<p>无信息搜索（盲目搜索）：指的是除了问题定义中提供的状态信息没有任何附加信息</p>
+</blockquote>
+<p>无信息搜索策略包含以下六种：</p>
+<ul>
+<li>宽度优先搜索（广度优先搜索）</li>
+<li>深度优先搜索</li>
+<li>一致代价搜索（等代价搜索）</li>
+<li>深度受限收缩</li>
+<li>迭代加深的深度优先搜索</li>
+<li>双向搜索</li>
+</ul>
+<h3 id="深度受限搜索"><a href="#深度受限搜索" class="headerlink" title="深度受限搜索"></a>深度受限搜索</h3><p><strong>深度受限搜索</strong>，为了避免深度优先搜索在无限状态空间条件下的尴尬，设置一个搜索深度限制L，当搜索深度限制小于最浅目标节点深度 d 时，算法是不完备的（即不能求得问题的解），若l &gt; d 时，深度首先搜索同样不是最优的，深度优先搜索可看做是特殊的深度受限搜索，其搜索深度限制为正无穷。</p>
+<h3 id="迭代加深的深度优先搜索"><a href="#迭代加深的深度优先搜索" class="headerlink" title="迭代加深的深度优先搜索"></a>迭代加深的深度优先搜索</h3><p><strong>迭代加深的深度优先搜索</strong>，是一种常用策略，他经常和深度优先搜索结合使用来确定最好的深度接线。做法是不断地增大深度限制，首先为0，接着为1，不断增加，直到找到目标。迭代加深的深度优先搜索是完备的，当路径代价是节点深度的非递减函数是该算法是最优的。当搜索空间较大并且不知道解所在的深度是，迭代加深的深度优先搜索是首选的无信息搜索方法。</p>
+<h3 id="双向搜索"><a href="#双向搜索" class="headerlink" title="双向搜索"></a>双向搜索</h3><p><strong>双向搜索</strong>：同时运行两个搜索，一个从初始状态向前搜索同时另一个从目标状态向后搜索，希望它们在中间某点相遇，此时搜索终止。需要注意的是即使双向搜索两个方向采用的都是宽度优先搜索，找到的解可能是不是最优解，部分问题很难采用双向搜索算法，例如八皇后问题。</p>
+<h3 id="六种无信息搜索策略对比"><a href="#六种无信息搜索策略对比" class="headerlink" title="六种无信息搜索策略对比"></a>六种无信息搜索策略对比</h3><p><img src="http://oz02m20ga.bkt.clouddn.com/0721%E5%85%AD%E4%B8%AD%E6%90%9C%E7%B4%A2%E7%AD%96%E7%95%A5%E5%AF%B9%E6%AF%94.png" alt="六种无信息搜索策略对比"></p>
+<blockquote>
+<p>宽度优先搜索、深度优先搜索、一致代价搜索较为简单，此处略去介绍，以后再做补充</p>
+</blockquote>
+<h2 id="有信息的搜索策略（启发式搜索）"><a href="#有信息的搜索策略（启发式搜索）" class="headerlink" title="有信息的搜索策略（启发式搜索）"></a>有信息的搜索策略（启发式搜索）</h2><blockquote>
+<p>下期再做介绍（主要是我还没有看完- -、）– 2018. 07. 21<br>近期很喜欢的一个<a href="http://music.163.com/m/mv?id=5855012&amp;userid=67464910" title="真实、好听" target="_blank" rel="noopener">视频</a>，真实、好听！</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/16/0716-近期学习内容梳理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -496,13 +667,17 @@
         
           
             <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><!-- 新建文章 -->
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><!-- 启动本地服务  --debug启动调试功能 -->
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><!-- 生成静态文件 -->
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><!-- 发布到GitHub -->
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 
           
@@ -589,7 +764,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
